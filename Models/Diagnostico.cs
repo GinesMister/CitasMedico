@@ -7,5 +7,6 @@
         public string Enfermedad {  get; set; }
 
         public Cita Cita { get; set; }
+        public int IdCita { get; set; }
     }
 }

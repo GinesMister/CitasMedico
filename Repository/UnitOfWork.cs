@@ -5,11 +5,11 @@ namespace CitasMedico.Repository
 {
     public interface IUnitOfWork
     {
-        ICitasMedicoRepository<Medico> Medicos { get; }
-        ICitasMedicoRepository<Cita> Citas { get; }
-        ICitasMedicoRepository<Diagnostico> Diagnosticos { get; }
-        ICitasMedicoRepository<Paciente> Pacientes { get; }
-        ICitasMedicoRepository<Usuario> Usuarios { get; }
+        CitasMedicoRepository<Medico> Medicos { get; }
+        CitasMedicoRepository<Cita> Citas { get; }
+        CitasMedicoRepository<Diagnostico> Diagnosticos { get; }
+        CitasMedicoRepository<Paciente> Pacientes { get; }
+        CitasMedicoRepository<Usuario> Usuarios { get; }
         Task<int> SaveChangesAsync();
     }
 
@@ -26,11 +26,11 @@ namespace CitasMedico.Repository
             Usuarios = new CitasMedicoRepository<Usuario>(_context);
         }
 
-        public ICitasMedicoRepository<Medico> Medicos { get; }
-        public ICitasMedicoRepository<Cita> Citas { get; }
-        public ICitasMedicoRepository<Diagnostico> Diagnosticos { get; }
-        public ICitasMedicoRepository<Paciente> Pacientes{ get; }
-        public ICitasMedicoRepository<Usuario> Usuarios { get; }
+        public CitasMedicoRepository<Medico> Medicos { get; }
+        public CitasMedicoRepository<Cita> Citas { get; }
+        public CitasMedicoRepository<Diagnostico> Diagnosticos { get; }
+        public CitasMedicoRepository<Paciente> Pacientes{ get; }
+        public CitasMedicoRepository<Usuario> Usuarios { get; }
 
         public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
     }

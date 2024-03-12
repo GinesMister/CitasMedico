@@ -1,11 +1,13 @@
-﻿namespace CitasMedico.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CitasMedico.Models
 {
     public class Cita
     {
+        [Key]
         public int Id { get; set; }
         public DateTime FechaHora { get; set; }
         public string MotivoCita { get; set; }
-        public int Attribute11 { get; set; }
 
         public Diagnostico Diagnostico { get; set; }
         public int IdMedico { get; set; }
