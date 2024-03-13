@@ -25,7 +25,7 @@ namespace CitasMedico.Repository
 
         public bool Exist(int id)
         {
-            return _context.Set<T>().Any(e => e.GetType().GetProperty("Id").GetValue(e) as int? == id);
+            return GetById(id) != null;
         }
 
         public IEnumerable<T> GetAll()
@@ -35,9 +35,6 @@ namespace CitasMedico.Repository
 
         public T? GetById(int id)
         {
-            if (!Exist(id))
-                return null;
-
             return _context.Set<T>().Find(id);
         }
 

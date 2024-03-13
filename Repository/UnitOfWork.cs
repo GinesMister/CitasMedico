@@ -11,6 +11,7 @@ namespace CitasMedico.Repository
         public UnitOfWork(DataContext context)
         {
             _context = context;
+            Citas = new CitasMedicoRepository<Cita>(_context);
             Medicos = new CitasMedicoRepository<Medico>(_context);
             Diagnosticos = new CitasMedicoRepository<Diagnostico>(_context);
             Pacientes = new CitasMedicoRepository<Paciente>(_context);
@@ -23,6 +24,6 @@ namespace CitasMedico.Repository
         public CitasMedicoRepository<Paciente> Pacientes{ get; }
         public CitasMedicoRepository<Usuario> Usuarios { get; }
 
-        public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
+        public int SaveChanges() => _context.SaveChanges();
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.IO.Pipes;
-
+﻿
 namespace CitasMedico.Models
 {
     public class Paciente : Usuario

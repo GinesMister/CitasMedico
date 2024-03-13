@@ -11,6 +11,6 @@ namespace CitasMedico.Interfaces
         CitasMedicoRepository<Paciente> Pacientes { get; }
         CitasMedicoRepository<Usuario> Usuarios { get; }
 
-        Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

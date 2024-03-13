@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CitasMedico.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using CitasMedico.Models;
 using CitasMedico.Services;
 using CitasMedico.DTOs;
+using CitasMedico.Exceptions;
 
 namespace CitasMedico.Controllers
 {
@@ -25,15 +19,10 @@ namespace CitasMedico.Controllers
 
         // GET: api/Citas
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(Cita))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<CitaDTO>))]
         public IActionResult GetAllCitas()
         {
-            Task<IEnumerable<CitaDTO>>? citas = _service.GetAllCitas();
-            if (citas == null)
-            {
-                return Ok();
-            }
-            return Ok(citas);
+            return Ok(_service.GetAllCitas());
         }
 
         // GET: api/Citas/5
@@ -42,39 +31,50 @@ namespace CitasMedico.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetCitaById(int id)
         {
-            var cita = _service.GetCitaById(id).Result;
-
-            if (cita == null)
-                return NotFound();
-
-            return Ok(cita);
+            try
+            {
+                var response = _service.GetCitaById(id);
+                return Ok(response);
+            }
+            catch (ServiceException ex)
+            {
+                if (ex.Error == ErrorType.NotFound)
+                    return NotFound(ex.Message);
+            }
+            return BadRequest();
         }
 
         // PUT: api/Citas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         public IActionResult UpdateCita(int id, [FromBody]CitaDTO cita)
         {
-            if (id != cita.Id)
-                return BadRequest();
-
-            if (cita == null)
-                return BadRequest();
-
-            if (_service.GetCitaById(id) == null)
-                return NotFound();
-
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            return Ok(_service.UpdateCita(cita).Result);
+            try
+            {
+                var result = _service.UpdateCita(id, cita);
+                return Ok(result);
+            }
+            catch (ServiceException ex)
+            {
+                switch (ex.Error)
+                {
+                    case ErrorType.NotFound:
+                        return NotFound(ex.Message);
+                    case ErrorType.BadRequest:
+                        return BadRequest(ex.Message);
+                    default:
+                        return BadRequest(ex.Message);
+                }
+            }
+
         }
 
         // POST: api/Citas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -83,12 +83,15 @@ namespace CitasMedico.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var createdCita = _service.CreateCita(cita).Result;
-
-            if (createdCita == null)
-                return BadRequest(ModelState);
-
-            return Ok(createdCita);
+            try
+            {
+                var result = _service.CreateCita(cita);
+                return Created();
+            }
+            catch (ServiceException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE: api/Citas/5
@@ -98,13 +101,21 @@ namespace CitasMedico.Controllers
         [ProducesResponseType(404)]
         public IActionResult DeleteCitaById(int id)
         {
-            if (GetCitaById(id) == null)
-                return NotFound();
-
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            return Ok(_service.DeleteCitaById(id).Result);
+            try
+            {
+                _service.DeleteCitaById(id);
+                return NoContent();
+            }
+            catch (ServiceException ex)
+            {
+                switch(ex.Error)
+                { 
+                    case ErrorType.NotFound: 
+                        return NotFound(ex.Message);
+                    default:
+                        return BadRequest(ex.Message);
+                }
+            }
         }
     }
 }

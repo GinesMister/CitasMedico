@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CitasMedico.Automapper;
 using CitasMedico.DTOs;
-using CitasMedico.Interfaces;
+using CitasMedico.Exceptions;
 using CitasMedico.Models;
 using CitasMedico.Repository;
 
@@ -19,47 +19,64 @@ namespace CitasMedico.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CitaDTO>?> GetAllCitas()
+        public IEnumerable<CitaDTO> GetAllCitas()
         {
-            Task<IEnumerable<Cita>>? result = _unitOfWork.Citas.GetAllAsync();
-            if (result != null)
+            return _mapper.Map<IEnumerable<CitaDTO>>(_unitOfWork.Citas.GetAll());
+        }
+
+        public CitaDTO GetCitaById(int id)
+        {
+            if (!_unitOfWork.Citas.Exist(id))
+                throw new ServiceException(ErrorType.NotFound, "No existe una cita con ese Id");
+            return _mapper.Map<Cita, CitaDTO>(_unitOfWork.Citas.GetById(id));
+        }
+
+        public CitaDTO CreateCita(CitaDTO cita)
+        {
+            try
             {
-                return _mapper.Map<IEnumerable<CitaDTO>>(result);
+                var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.Add(_mapper.Map<Cita>(cita)));
+                _unitOfWork.SaveChanges();
+                return result;
             }
-            return null;
-        }
-
-        public async Task<CitaDTO>? GetCitaById(int id)
-        {
-            Task<Cita>? result = _unitOfWork.Citas.GetByIdAsync(id);
-            if (result != null)
+            catch (Exception ex)
             {
-                return _mapper.Map<CitaDTO>(result);
+                throw new ServiceException(ErrorType.UnexpectedError, "Ha ocurrido un error inesperado", ex.InnerException);
             }
-            return null;
+
         }
 
-        public async Task<CitaDTO> CreateCita(CitaDTO cita)
+        public CitaDTO DeleteCitaById(int id)
         {
-            var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.AddAsync(_mapper.Map<Cita>(cita)));
-
-            await _unitOfWork.SaveChangesAsync();
-            return result;
+            if (!_unitOfWork.Citas.Exist(id))
+                throw new ServiceException(ErrorType.NotFound);
+            try
+            {
+                var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.Delete(_unitOfWork.Citas.GetById(id)));
+                _unitOfWork.SaveChanges();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ErrorType.UnexpectedError, "Ha ocurrido un error inesperado", ex.InnerException);
+            }
         }
 
-        public async Task<CitaDTO> DeleteCitaById(int id)
+        public async Task<CitaDTO> UpdateCita(int id, CitaDTO cita)
         {
-            Cita cita = await _unitOfWork.Citas.GetByIdAsync(id);
-            var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.DeleteAsync(cita));
-            await _unitOfWork.SaveChangesAsync();
-            return result;
-        }
-
-        public async Task<CitaDTO> UpdateCita(CitaDTO cita)
-        {
-            var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.UpdateAsync(_unitOfWork.Citas.GetByIdAsync(cita.Id).Result));
-            await _unitOfWork.SaveChangesAsync();
-            return result;
+            if (cita.Id == id)
+                throw new ServiceException(ErrorType.BadRequest, "El ID proporcionado y el de la cita no es el mismo");
+            Cita? Cita = _unitOfWork.Citas.GetById(cita.Id);
+            if (cita == null)
+                throw new ServiceException(ErrorType.NotFound, "No hay una cita con ese ID");
+            try
+            {
+                return _mapper.Map<Cita, CitaDTO>(_unitOfWork.Citas.Update(Cita));
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ErrorType.UnexpectedError, "Error inesperado en el proceso de actualización", ex.InnerException);
+            }
         }
 
     }
