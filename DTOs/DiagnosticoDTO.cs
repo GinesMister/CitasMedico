@@ -8,6 +8,6 @@ namespace CitasMedico.DTOs
         public string ValoracionEspecialista { get; set; }
         public string Enfermedad { get; set; }
 
-        public CitaDTO Cita { get; set; }
+        public int IdCita { get; set; }
     }
 }

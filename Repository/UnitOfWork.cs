@@ -1,18 +1,9 @@
 ﻿using CitasMedico.Data;
+using CitasMedico.Interfaces;
 using CitasMedico.Models;
 
 namespace CitasMedico.Repository
 {
-    public interface IUnitOfWork
-    {
-        CitasMedicoRepository<Medico> Medicos { get; }
-        CitasMedicoRepository<Cita> Citas { get; }
-        CitasMedicoRepository<Diagnostico> Diagnosticos { get; }
-        CitasMedicoRepository<Paciente> Pacientes { get; }
-        CitasMedicoRepository<Usuario> Usuarios { get; }
-        Task<int> SaveChangesAsync();
-    }
-
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext _context;

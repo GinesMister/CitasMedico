@@ -8,8 +8,8 @@ namespace CitasMedico.DTOs
         public DateTime FechaHora { get; set; }
         public string MotivoCita { get; set; }
 
-        public Diagnostico Diagnostico { get; set; }
-        public Medico Medico { get; set; }
-        public PacienteDTO Paciente { get; set; }
+        public int IdDiagnostico { get; set; }
+        public int IdMedico { get; set; }
+        public int IdPaciente { get; set; }
     }
 }

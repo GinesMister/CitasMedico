@@ -3,14 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CitasMedico.Repository
 {
-    public interface ICitasMedicoRepository<T> where T : class
-    {
-        Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();
-        Task AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
-    }
 
     public class CitasMedicoRepository<T> : ICitasMedicoRepository<T> where T : class
     {
@@ -21,10 +13,37 @@ namespace CitasMedico.Repository
             _context = context;
         }
 
-        public async Task<T> GetByIdAsync(int id) => await _context.Set<T>().FindAsync(id);
-        public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
-        public async Task AddAsync(T entity) => await _context.Set<T>().AddAsync(entity);
-        public async Task UpdateAsync(T entity) => await Task.Run(() => _context.Set<T>().Update(entity));
-        public async Task DeleteAsync(T entity) => await Task.Run(() => _context.Set<T>().Remove(entity));
+        public T Add(T entity)
+        {
+            return _context.Add(entity).Entity;
+        }
+
+        public T Delete(T entity)
+        {
+            return _context.Remove(entity).Entity;
+        }
+
+        public bool Exist(int id)
+        {
+            return _context.Set<T>().Any(e => e.GetType().GetProperty("Id").GetValue(e) as int? == id);
+        }
+
+        public IEnumerable<T> GetAll()
+        {
+            return _context.Set<T>().ToList();
+        }
+
+        public T? GetById(int id)
+        {
+            if (!Exist(id))
+                return null;
+
+            return _context.Set<T>().Find(id);
+        }
+
+        public T Update(T entity)
+        {
+            return _context.Update(entity).Entity;
+        }
     }
 }

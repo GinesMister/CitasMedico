@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using CitasMedico.Automapper;
 using CitasMedico.DTOs;
+using CitasMedico.Interfaces;
 using CitasMedico.Models;
 using CitasMedico.Repository;
 
 namespace CitasMedico.Services
 {
+    
     public class CitaService
     {
         private readonly IMapper _mapper;
@@ -17,18 +19,24 @@ namespace CitasMedico.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CitaDTO>> GetAllCitas()
+        public async Task<IEnumerable<CitaDTO>?> GetAllCitas()
         {
-            var result = _mapper.Map<IEnumerable<CitaDTO>>(_unitOfWork.Citas.GetAllAsync());
-            await _unitOfWork.SaveChangesAsync();
-            return result;
+            Task<IEnumerable<Cita>>? result = _unitOfWork.Citas.GetAllAsync();
+            if (result != null)
+            {
+                return _mapper.Map<IEnumerable<CitaDTO>>(result);
+            }
+            return null;
         }
 
-        public async Task<CitaDTO> GetCitaById(int id)
+        public async Task<CitaDTO>? GetCitaById(int id)
         {
-            var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.GetByIdAsync(id));
-            await _unitOfWork.SaveChangesAsync();
-            return result;
+            Task<Cita>? result = _unitOfWork.Citas.GetByIdAsync(id);
+            if (result != null)
+            {
+                return _mapper.Map<CitaDTO>(result);
+            }
+            return null;
         }
 
         public async Task<CitaDTO> CreateCita(CitaDTO cita)

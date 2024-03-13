@@ -28,7 +28,11 @@ namespace CitasMedico.Controllers
         [ProducesResponseType(200, Type = typeof(Cita))]
         public IActionResult GetAllCitas()
         {
-            var citas = _service.GetAllCitas().Result;
+            Task<IEnumerable<CitaDTO>>? citas = _service.GetAllCitas();
+            if (citas == null)
+            {
+                return Ok();
+            }
             return Ok(citas);
         }
 
@@ -41,9 +45,7 @@ namespace CitasMedico.Controllers
             var cita = _service.GetCitaById(id).Result;
 
             if (cita == null)
-            {
                 return NotFound();
-            }
 
             return Ok(cita);
         }
@@ -51,32 +53,24 @@ namespace CitasMedico.Controllers
         // PUT: api/Citas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCita(int id, Cita cita)
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCita(int id, [FromBody]CitaDTO cita)
         {
             if (id != cita.Id)
-            {
                 return BadRequest();
-            }
 
-            _context.Entry(cita).State = EntityState.Modified;
+            if (cita == null)
+                return BadRequest();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CitaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (_service.GetCitaById(id) == null)
+                return NotFound();
 
-            return NoContent();
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            return Ok(_service.UpdateCita(cita).Result);
         }
 
         // POST: api/Citas
@@ -84,37 +78,33 @@ namespace CitasMedico.Controllers
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
-        public IActionResult CreateCita([FromBody] CitaDTO cita)
+        public IActionResult CreateCita([FromBody]CitaDTO cita)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var createdCita = _service.CreateCita(cita).Result;
 
             if (createdCita == null)
-            {
                 return BadRequest(ModelState);
-            }
 
-            return createdCita;
+            return Ok(createdCita);
         }
 
         // DELETE: api/Citas/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCita(int id)
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCitaById(int id)
         {
-            var cita = await _context.Cita.FindAsync(id);
-            if (cita == null)
-            {
+            if (GetCitaById(id) == null)
                 return NotFound();
-            }
 
-            _context.Cita.Remove(cita);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return NoContent();
-        }
-
-        private bool CitaExists(int id)
-        {
-            return _context.Cita.Any(e => e.Id == id);
+            return Ok(_service.DeleteCitaById(id).Result);
         }
     }
 }

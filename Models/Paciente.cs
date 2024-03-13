@@ -9,7 +9,7 @@ namespace CitasMedico.Models
         public string Telefono { get; set; }
         public string Direccion { get; set; }
 
-        public ICollection<Cita> Citas { get; set; } = new List<Cita>();
-        public ICollection<MedicoPaciente> Medicos { get; set; } = new List<MedicoPaciente>();
+        public virtual ICollection<Cita> Citas { get; set; }
+        public virtual ICollection<MedicoPaciente> Medicos { get; set; }
     }
 }
