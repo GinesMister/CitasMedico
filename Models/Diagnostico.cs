@@ -7,7 +7,7 @@ namespace CitasMedico.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string ValoracionEspecialista { get; set; }
         public string Enfermedad { get; set; }
 

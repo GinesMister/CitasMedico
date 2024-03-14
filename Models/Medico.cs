@@ -5,6 +5,6 @@
         public string NumColegiado { get; set; }
 
         public virtual ICollection<Cita> Citas { get; set; }
-        public virtual ICollection<MedicoPaciente> pacientes { get; set; }
+        public virtual ICollection<Paciente> Pacientes { get; set; }
     }
 }

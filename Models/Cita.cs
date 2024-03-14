@@ -7,11 +7,11 @@ namespace CitasMedico.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public DateTime FechaHora { get; set; }
         public string MotivoCita { get; set; }
 
-        public virtual Diagnostico Diagnostico { get; set; }
+        public Diagnostico Diagnostico { get; set; }
 
         public int IdMedico { get; set; }
         public int IdPaciente { get; set; }

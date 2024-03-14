@@ -62,11 +62,13 @@ namespace CitasMedico.Services
             }
         }
 
-        public async Task<CitaDTO> UpdateCita(int id, CitaDTO cita)
+        public CitaDTO UpdateCita(int id, CitaDTO cita)
         {
+            if (cita.Id == null)
+               throw new ServiceException(ErrorType.BadRequest, "No se ha proporcionado un ID en la cita");
             if (cita.Id == id)
                 throw new ServiceException(ErrorType.BadRequest, "El ID proporcionado y el de la cita no es el mismo");
-            Cita? Cita = _unitOfWork.Citas.GetById(cita.Id);
+            Cita? Cita = _unitOfWork.Citas.GetById(id);
             if (cita == null)
                 throw new ServiceException(ErrorType.NotFound, "No hay una cita con ese ID");
             try

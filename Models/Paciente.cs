@@ -9,6 +9,6 @@ namespace CitasMedico.Models
         public string Direccion { get; set; }
 
         public virtual ICollection<Cita> Citas { get; set; }
-        public virtual ICollection<MedicoPaciente> Medicos { get; set; }
+        public virtual ICollection<Medico> Medicos { get; set; }
     }
 }

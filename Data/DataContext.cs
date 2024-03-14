@@ -11,22 +11,13 @@ namespace CitasMedico.Data
         public DbSet<Diagnostico> Diagnostico { get; set; }
         public DbSet<Medico> Medico { get; set; }
         public DbSet<Paciente> Paciente { get; set; }
-        public DbSet<MedicoPaciente> MedicoPaciente { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MedicoPaciente>()
-                .HasKey(mp => new { mp.IdMedico, mp.IdPaciente });
-
-            modelBuilder.Entity<MedicoPaciente>()
-                .HasOne(mp => mp.Medico)
-                .WithMany(m => m.pacientes)
-                .HasForeignKey(mp => mp.IdMedico);
-
-            modelBuilder.Entity<MedicoPaciente>()
-                .HasOne(mp => mp.Paciente)
+            modelBuilder.Entity<Medico>()
+                .HasMany(m => m.Pacientes)
                 .WithMany(p => p.Medicos)
-                .HasForeignKey(mp => mp.IdPaciente);
+                .UsingEntity(j => j.ToTable("MedicoPaciente"));
 
             modelBuilder.Entity<Cita>()
                 .HasOne(c => c.Medico)
