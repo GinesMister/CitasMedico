@@ -27,7 +27,7 @@ namespace CitasMedico.Controllers
 
         // GET: api/Citas/5
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(Cita))]
+        [ProducesResponseType(200, Type = typeof(CitaDTO))]
         [ProducesResponseType(400)]
         public IActionResult GetCitaById(int id)
         {
@@ -71,7 +71,6 @@ namespace CitasMedico.Controllers
                         return BadRequest(ex.Message);
                 }
             }
-
         }
 
         // POST: api/Citas

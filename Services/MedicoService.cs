@@ -29,11 +29,11 @@ namespace CitasMedico.Services
             return _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.GetById(id));
         }
 
-        public MedicoDTO CreateMedico(MedicoDTO medico)
+        public MedicoDTO CreateMedico(MedicoRequestDTO medico)
         {
             try
             {
-                var result = _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.Add(_mapper.Map<Medico>(medico)));
+                var result = _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.Add(_mapper.Map<MedicoRequestDTO, Medico>(medico)));
                 _unitOfWork.SaveChanges();
                 return result;
             }
@@ -42,6 +42,45 @@ namespace CitasMedico.Services
                 throw new ServiceException(ErrorType.UnexpectedError, "Ha ocurrido un error inesperado", ex.InnerException);
             }
 
+        }
+
+        public MedicoDTO DeleteMedicoById(int id)
+        {
+            if (!_unitOfWork.Medicos.Exist(id))
+                throw new ServiceException(ErrorType.NotFound);
+            try
+            {
+                var result = _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.Delete(_unitOfWork.Medicos.GetById(id)));
+                _unitOfWork.SaveChanges();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ServiceException(ErrorType.UnexpectedError, "Ha ocurrido un error inesperado", ex.InnerException);
+            }
+        }
+
+        public MedicoDTO UpdateMedico(int id, MedicoRequestDTO medico)
+        {
+            Medico? Medico = _unitOfWork.Medicos.GetById(id);
+            if (Medico == null)
+                throw new ServiceException(ErrorType.NotFound, "No hay médico con ese ID");
+            try
+            {
+                Medico.Clave = medico.Clave;
+                Medico.Nombre = medico.Nombre;
+                Medico.Apellidos = medico.Apellidos;
+                Medico.NombreUsuario = medico.NombreUsuario;
+                Medico.NumColegiado = medico.NumColegiado;
+                _unitOfWork.Medicos.Update(_mapper.Map<Medico>(Medico));
+
+                _unitOfWork.SaveChanges();
+                return _mapper.Map<MedicoDTO>(Medico);
+            }
+            catch (ServiceException ex)
+            {
+                throw new ServiceException(ErrorType.UnexpectedError, "Error inesperado en el proceso de actualización", ex.InnerException);
+            }
         }
     }
 }

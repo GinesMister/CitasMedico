@@ -4,7 +4,7 @@ namespace CitasMedico.DTOs
 {
     public class DiagnosticoDTO
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string ValoracionEspecialista { get; set; }
         public string Enfermedad { get; set; }
     }

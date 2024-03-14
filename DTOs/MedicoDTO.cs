@@ -6,5 +6,6 @@ namespace CitasMedico.DTOs
     {
         public string NumColegiado { get; set; }
         public virtual ICollection<CitaDTO> Citas { get; set; }
+        public virtual ICollection<PacienteDTO> Pacientes { get; set;}
     }
 }

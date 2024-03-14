@@ -1,7 +1,6 @@
 using CitasMedico.Data;
 using Microsoft.EntityFrameworkCore;
 using CitasMedico.Services;
-using CitasMedico.Interfaces;
 using CitasMedico.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<CitaService>();
+builder.Services.AddScoped<MedicoService>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -1,6 +1,6 @@
 ﻿namespace CitasMedico.DTOs
 {
-    public class MedicoRequestDTO
+    public class MedicoRequestDTO : UsuarioRequestDTO
     {
         public string NumColegiado { get; set; }
     }
