@@ -1,4 +1,6 @@
-﻿namespace CitasMedico.DTOs
+﻿using Microsoft.EntityFrameworkCore.Update.Internal;
+
+namespace CitasMedico.DTOs
 {
     public class PacienteDTO : UsuarioDTO
     {

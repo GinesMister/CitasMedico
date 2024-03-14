@@ -6,34 +6,34 @@ using CitasMedico.Repository;
 
 namespace CitasMedico.Services
 {
-    public class MedicoService
+    public class PacienteService 
     {
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
 
-        public MedicoService(UnitOfWork unitOfWork, IMapper mapper)
+        public PacienteService(UnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public IEnumerable<MedicoDTO> GetAllMedicos()
+        public IEnumerable<PacienteDTO> GetAllPacientes()
         {
-            return _mapper.Map<IEnumerable<MedicoDTO>>(_unitOfWork.Medicos.GetAll());
+            return _mapper.Map<IEnumerable<PacienteDTO>>(_unitOfWork.Pacientes.GetAll());
         }
 
-        public MedicoDTO GetMedicoById(int id)
+        public PacienteDTO GetPacienteById(int id)
         {
             if (!_unitOfWork.Medicos.Exist(id))
-                throw new ServiceException(ErrorType.NotFound, "No existe un médico con ese Id");
-            return _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.GetById(id));
+                throw new ServiceException(ErrorType.NotFound, "No existe un paciente con ese Id");
+            return _mapper.Map<PacienteDTO>(_unitOfWork.Pacientes.GetById(id));
         }
 
-        public MedicoDTO CreateMedico(MedicoRequestDTO medico)
+        public PacienteDTO CreatePaciente(PacienteRequestDTO paciente)
         {
             try
             {
-                var result = _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.Add(_mapper.Map<MedicoRequestDTO, Medico>(medico)));
+                var result = _mapper.Map<PacienteDTO>(_unitOfWork.Pacientes.Add(_mapper.Map<PacienteRequestDTO, Paciente>(paciente)));
                 _unitOfWork.SaveChanges();
                 return result;
             }
@@ -44,13 +44,13 @@ namespace CitasMedico.Services
 
         }
 
-        public MedicoDTO DeleteMedicoById(int id)
+        public PacienteDTO DeletePacienteById(int id)
         {
-            if (!_unitOfWork.Medicos.Exist(id))
+            if (!_unitOfWork.Pacientes.Exist(id))
                 throw new ServiceException(ErrorType.NotFound);
             try
             {
-                var result = _mapper.Map<MedicoDTO>(_unitOfWork.Medicos.Delete(_unitOfWork.Medicos.GetById(id)));
+                var result = _mapper.Map<PacienteDTO>(_unitOfWork.Pacientes.Delete(_unitOfWork.Pacientes.GetById(id)));
                 _unitOfWork.SaveChanges();
                 return result;
             }
@@ -60,18 +60,18 @@ namespace CitasMedico.Services
             }
         }
 
-        public MedicoDTO UpdateMedico(int id, MedicoRequestDTO medico)
+        public PacienteDTO UpdatePaciente(int id, PacienteRequestDTO paciente)
         {
-            Medico? Medico = _unitOfWork.Medicos.GetById(id);
-            if (Medico == null)
-                throw new ServiceException(ErrorType.NotFound, "No hay médico con ese ID");
+            Paciente? Paciente = _unitOfWork.Pacientes.GetById(id);
+            if (Paciente == null)
+                throw new ServiceException(ErrorType.NotFound, "No hay un paciente con ese ID");
             try
             {
-                Medico.Update(medico);
-                _unitOfWork.Medicos.Update(_mapper.Map<Medico>(Medico));
+                Paciente.Update(paciente);
+                _unitOfWork.Pacientes.Update(_mapper.Map<Paciente>(Paciente));
 
                 _unitOfWork.SaveChanges();
-                return _mapper.Map<MedicoDTO>(Medico);
+                return _mapper.Map<PacienteDTO>(Paciente);
             }
             catch (ServiceException ex)
             {
