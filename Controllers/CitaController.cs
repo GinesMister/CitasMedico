@@ -8,16 +8,16 @@ namespace CitasMedico.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CitasController : Controller
+    public class CitaController : Controller
     {
         private readonly CitaService _service;
 
-        public CitasController(CitaService service)
+        public CitaController(CitaService service)
         {
             _service = service;
         }
 
-        // GET: api/Citas
+        // GET: api/Cita
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<CitaDTO>))]
         public IActionResult GetAllCitas()
@@ -25,7 +25,7 @@ namespace CitasMedico.Controllers
             return Ok(_service.GetAllCitas());
         }
 
-        // GET: api/Citas/5
+        // GET: api/Cita/5
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(CitaDTO))]
         [ProducesResponseType(400)]
@@ -44,7 +44,7 @@ namespace CitasMedico.Controllers
             return BadRequest();
         }
 
-        // PUT: api/Citas/5
+        // PUT: api/Cita/5
         [HttpPut("{id}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
@@ -73,7 +73,7 @@ namespace CitasMedico.Controllers
             }
         }
 
-        // POST: api/Citas
+        // POST: api/Cita
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -93,7 +93,7 @@ namespace CitasMedico.Controllers
             }
         }
 
-        // DELETE: api/Citas/5
+        // DELETE: api/Cita/5
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]

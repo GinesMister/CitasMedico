@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddScoped<CitaService>();
 builder.Services.AddScoped<MedicoService>();
+builder.Services.AddScoped<PacienteService>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

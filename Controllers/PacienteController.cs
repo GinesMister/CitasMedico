@@ -7,32 +7,32 @@ namespace CitasMedico.Controllers
 {
     [Route("citasmedicos/[controller]")]
     [ApiController]
-    public class MedicoController : Controller
+    public class PacienteController : Controller
     {
-        private readonly MedicoService _service;
+        private readonly PacienteService _service;
 
-        public MedicoController(MedicoService service)
+        public PacienteController(PacienteService service)
         {
             _service = service;
         }
 
-        // GET: citasmedicos/Medico
+        // GET: citasmedicos/Paciente
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<MedicoDTO>))]
         public IActionResult GetAllMedicos()
         {
-            return Ok(_service.GetAllMedicos());
+            return Ok(_service.GetAllPacientes());
         }
 
-        // GET: citasmedicos/Medico/5
+        // GET: citasmedicos/Paciente/5
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(MedicoDTO))]
+        [ProducesResponseType(200, Type = typeof(PacienteDTO))]
         [ProducesResponseType(404)]
-        public IActionResult GetMedicoById(int id)
+        public IActionResult GetPacienteById(int id)
         {
             try
             {
-                var response = _service.GetMedicoById(id);
+                var response = _service.GetPacienteById(id);
                 return Ok(response);
             }
             catch (ServiceException ex)
@@ -46,19 +46,19 @@ namespace CitasMedico.Controllers
             return BadRequest();
         }
 
-        // PUT: citasmedicos/Medico/5
+        // PUT: citasmedicos/Paciente/5
         [HttpPut("{id}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateMedico(int id, [FromBody] MedicoRequestDTO medico)
+        public IActionResult UpdatePaciente(int id, [FromBody] PacienteRequestDTO paciente)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
             try
             {
-                var result = _service.UpdateMedico(id, medico);
+                var result = _service.UpdatePaciente(id, paciente);
                 return Ok(result);
             }
             catch (ServiceException ex)
@@ -76,18 +76,18 @@ namespace CitasMedico.Controllers
             }
         }
 
-        // POST: citasmedicos/Medicos
+        // POST: citasmedicos/Pacientes
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        public IActionResult CreateMedico([FromBody] MedicoRequestDTO medico)
+        public IActionResult CreatePaciente([FromBody] PacienteRequestDTO paciente)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var result = _service.CreateMedico(medico);
+                var result = _service.CreatePaciente(paciente);
                 return Created("", result);
             }
             catch (ServiceException ex)
@@ -107,11 +107,11 @@ namespace CitasMedico.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult DeleteMedicoById(int id)
+        public IActionResult DeletePacienteById(int id)
         {
             try
             {
-                _service.DeleteMedicoById(id);
+                _service.DeletePacienteById(id);
                 return NoContent();
             }
             catch (ServiceException ex)
