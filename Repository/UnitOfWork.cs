@@ -14,15 +14,13 @@ namespace CitasMedico.Repository
             Citas = new GenericRepository<Cita>(_context);
             Medicos = new MedicoRepository<Medico>(_context);
             Diagnosticos = new GenericRepository<Diagnostico>(_context);
-            Pacientes = new GenericRepository<Paciente>(_context);
-            Usuarios = new GenericRepository<Usuario>(_context);
+            Pacientes = new PacienteRepository<Paciente>(_context);
         }
 
         public MedicoRepository<Medico> Medicos { get; }
         public GenericRepository<Cita> Citas { get; }
         public GenericRepository<Diagnostico> Diagnosticos { get; }
-        public GenericRepository<Paciente> Pacientes{ get; }
-        public GenericRepository<Usuario> Usuarios { get; }
+        public PacienteRepository<Paciente> Pacientes{ get; }
 
         public int SaveChanges() => _context.SaveChanges();
     }

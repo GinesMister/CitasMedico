@@ -40,7 +40,7 @@ namespace CitasMedico.Services
             // Unión de médico y paciente
             Medico Medico = _unitOfWork.Medicos.GetById(cita.IdMedico);
             Paciente Paciente = _unitOfWork.Pacientes.GetById(cita.IdPaciente);
-            Paciente.Medicos.Add(Medico);
+            Medico.Pacientes.Add(Paciente);
             _unitOfWork.Medicos.Update(Medico);
             try
             {
@@ -80,9 +80,13 @@ namespace CitasMedico.Services
             Cita? Cita = _unitOfWork.Citas.GetById(id);
             if (cita == null)
                 throw new ServiceException(ErrorType.NotFound, "No hay una cita con ese ID");
+
+            Cita.Update(_mapper, cita);
             try
             {
-                return _mapper.Map<Cita, CitaDTO>(_unitOfWork.Citas.Update(Cita));
+                _unitOfWork.Citas.Update(Cita);
+                _unitOfWork.SaveChanges();
+                return _mapper.Map<CitaDTO>(cita);
             }
             catch (Exception ex)
             {

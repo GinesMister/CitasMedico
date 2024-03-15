@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AutoMapper;
+using CitasMedico.DTOs;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CitasMedico.Models
@@ -17,5 +19,14 @@ namespace CitasMedico.Models
         public int IdPaciente { get; set; }
         public Medico Medico { get; set; }
         public Paciente Paciente { get; set; }
+
+        public void Update(IMapper _mapper, CitaDTO cita)
+        {
+            FechaHora = cita.FechaHora;
+            MotivoCita = cita.MotivoCita;
+            Diagnostico = _mapper.Map<Diagnostico>(cita.Diagnostico);
+            IdMedico = cita.IdMedico;
+            IdPaciente = cita.IdPaciente;
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CitasMedico.Models;
 using CitasMedico.Services;
 using CitasMedico.DTOs;
 using CitasMedico.Exceptions;

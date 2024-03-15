@@ -64,15 +64,27 @@ namespace CitasMedico.Services
             Medico? Medico = _unitOfWork.Medicos.GetById(id);
             if (Medico == null)
                 throw new ServiceException(ErrorType.NotFound, "No hay médico con ese ID");
+            if (medico.IdsPaciente != null)
+            {
+                Medico.Pacientes.Clear();
+                foreach (var item in medico.IdsPaciente)
+                {
+                    Paciente? Paciente = _unitOfWork.Pacientes.GetById(item);
+                    if (Paciente == null)
+                        throw new ServiceException(ErrorType.NotFound, "No existe el paciente proporcionado");
+                    Medico.Pacientes.Add(Paciente);
+                }
+            }
+
+            Medico.Update(medico);
             try
             {
-                Medico.Update(medico);
-                _unitOfWork.Medicos.Update(_mapper.Map<Medico>(Medico));
+                _unitOfWork.Medicos.Update(Medico);
 
                 _unitOfWork.SaveChanges();
                 return _mapper.Map<MedicoDTO>(Medico);
             }
-            catch (ServiceException ex)
+            catch (Exception ex)
             {
                 throw new ServiceException(ErrorType.UnexpectedError, "Error inesperado en el proceso de actualización", ex.InnerException);
             }

@@ -8,8 +8,7 @@ namespace CitasMedico.Interfaces
         GenericRepository<Cita> Citas { get; }
         GenericRepository<Diagnostico> Diagnosticos { get; }
         MedicoRepository<Medico> Medicos { get; }
-        GenericRepository<Paciente> Pacientes { get; }
-        GenericRepository<Usuario> Usuarios { get; }
+        PacienteRepository<Paciente> Pacientes { get; }
 
         int SaveChanges();
     }
