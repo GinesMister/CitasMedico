@@ -12,13 +12,13 @@ namespace CitasMedico.Repository
         {
             _context = context;
             Citas = new GenericRepository<Cita>(_context);
-            Medicos = new GenericRepository<Medico>(_context);
+            Medicos = new MedicoRepository<Medico>(_context);
             Diagnosticos = new GenericRepository<Diagnostico>(_context);
             Pacientes = new GenericRepository<Paciente>(_context);
             Usuarios = new GenericRepository<Usuario>(_context);
         }
 
-        public GenericRepository<Medico> Medicos { get; }
+        public MedicoRepository<Medico> Medicos { get; }
         public GenericRepository<Cita> Citas { get; }
         public GenericRepository<Diagnostico> Diagnosticos { get; }
         public GenericRepository<Paciente> Pacientes{ get; }

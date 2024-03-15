@@ -2,6 +2,7 @@ using CitasMedico.Data;
 using Microsoft.EntityFrameworkCore;
 using CitasMedico.Services;
 using CitasMedico.Repository;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -10,11 +10,17 @@ namespace CitasMedico.Repository
 
         public MedicoRepository(DataContext context) : base(context)
         {
+            _context = context;
         }
 
-        public new IEnumerable<T> GetAll()
+        public new IEnumerable<Medico> GetAll()
         {
-            return (IEnumerable<T>)_context.Medico.Include(m => m.Pacientes).AsEnumerable();
+            return _context.Medico.Include(m => m.Pacientes).ToList();
+        }
+
+        public new Medico? GetById(int id)
+        {
+            return _context.Medico.Include(m => m.Pacientes).FirstOrDefault(m => m.Id == id);
         }
     }
 }
