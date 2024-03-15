@@ -1,6 +1,6 @@
 ﻿namespace CitasMedico.Repository
 {
-    public interface ICitasMedicoRepository<T> where T : class
+    public interface IGenericRepository<T> where T : class
     {
         bool Exist(int id);
         T GetById(int id);

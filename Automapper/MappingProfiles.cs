@@ -11,7 +11,9 @@ namespace CitasMedico.Automapper
         {
             CreateMap<Cita, CitaDTO>();
             CreateMap<CitaDTO, Cita>();
+
             CreateMap<Diagnostico, DiagnosticoDTO>();
+            CreateMap<DiagnosticoDTO, Diagnostico>();
             
             CreateMap<Medico, MedicoDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

@@ -11,18 +11,18 @@ namespace CitasMedico.Repository
         public UnitOfWork(DataContext context)
         {
             _context = context;
-            Citas = new CitasMedicoRepository<Cita>(_context);
-            Medicos = new CitasMedicoRepository<Medico>(_context);
-            Diagnosticos = new CitasMedicoRepository<Diagnostico>(_context);
-            Pacientes = new CitasMedicoRepository<Paciente>(_context);
-            Usuarios = new CitasMedicoRepository<Usuario>(_context);
+            Citas = new GenericRepository<Cita>(_context);
+            Medicos = new GenericRepository<Medico>(_context);
+            Diagnosticos = new GenericRepository<Diagnostico>(_context);
+            Pacientes = new GenericRepository<Paciente>(_context);
+            Usuarios = new GenericRepository<Usuario>(_context);
         }
 
-        public CitasMedicoRepository<Medico> Medicos { get; }
-        public CitasMedicoRepository<Cita> Citas { get; }
-        public CitasMedicoRepository<Diagnostico> Diagnosticos { get; }
-        public CitasMedicoRepository<Paciente> Pacientes{ get; }
-        public CitasMedicoRepository<Usuario> Usuarios { get; }
+        public GenericRepository<Medico> Medicos { get; }
+        public GenericRepository<Cita> Citas { get; }
+        public GenericRepository<Diagnostico> Diagnosticos { get; }
+        public GenericRepository<Paciente> Pacientes{ get; }
+        public GenericRepository<Usuario> Usuarios { get; }
 
         public int SaveChanges() => _context.SaveChanges();
     }

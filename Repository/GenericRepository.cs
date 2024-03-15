@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 namespace CitasMedico.Repository
 {
 
-    public class CitasMedicoRepository<T> : ICitasMedicoRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly DataContext _context;
 
-        public CitasMedicoRepository(DataContext context)
+        public GenericRepository(DataContext context)
         {
             _context = context;
         }

@@ -41,7 +41,6 @@ namespace CitasMedico.Services
             {
                 throw new ServiceException(ErrorType.UnexpectedError, "Ha ocurrido un error inesperado", ex.InnerException);
             }
-
         }
 
         public MedicoDTO DeleteMedicoById(int id)

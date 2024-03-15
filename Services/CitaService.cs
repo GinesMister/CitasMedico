@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CitasMedico.Automapper;
 using CitasMedico.DTOs;
 using CitasMedico.Exceptions;
 using CitasMedico.Models;
@@ -28,11 +27,21 @@ namespace CitasMedico.Services
         {
             if (!_unitOfWork.Citas.Exist(id))
                 throw new ServiceException(ErrorType.NotFound, "No existe una cita con ese Id");
-            return _mapper.Map<Cita, CitaDTO>(_unitOfWork.Citas.GetById(id));
+            return _mapper.Map<CitaDTO>(_unitOfWork.Citas.GetById(id));
         }
 
         public CitaDTO CreateCita(CitaDTO cita)
         {
+            if (!_unitOfWork.Medicos.Exist(cita.IdMedico))
+                throw new ServiceException(ErrorType.NotFound, "El ID del médico no existe");
+            if (!_unitOfWork.Pacientes.Exist(cita.IdPaciente))
+                throw new ServiceException(ErrorType.NotFound, "El ID del paciente no existe");
+
+            // Unión de médico y paciente
+            Medico Medico = _unitOfWork.Medicos.GetById(cita.IdMedico);
+            Paciente Paciente = _unitOfWork.Pacientes.GetById(cita.IdPaciente);
+            Paciente.Medicos.Add(Medico);
+            _unitOfWork.Medicos.Update(Medico);
             try
             {
                 var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.Add(_mapper.Map<Cita>(cita)));
