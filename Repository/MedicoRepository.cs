@@ -15,7 +15,9 @@ namespace CitasMedico.Repository
 
         public new IEnumerable<Medico> GetAll()
         {
-            return _context.Medico.Include(m => m.Pacientes).ToList();
+            return _context.Medico.Include(m => m.Pacientes)
+                //.Include(m => m.Citas)
+                .ToList();
         }
 
         public new Medico? GetById(int id)

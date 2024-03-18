@@ -75,7 +75,7 @@ namespace CitasMedico.Services
         {
             if (cita.Id == null)
                throw new ServiceException(ErrorType.BadRequest, "No se ha proporcionado un ID en la cita");
-            if (cita.Id == id)
+            if (cita.Id != id)
                 throw new ServiceException(ErrorType.BadRequest, "El ID proporcionado y el de la cita no es el mismo");
             Cita? Cita = _unitOfWork.Citas.GetById(id);
             if (cita == null)

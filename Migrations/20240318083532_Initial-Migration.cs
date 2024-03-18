@@ -66,9 +66,11 @@ namespace CitasMedico.Migrations
                 name: "Cita",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     FechaHora = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MotivoCita = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdDiagnostico = table.Column<int>(type: "int", nullable: false),
                     IdMedico = table.Column<int>(type: "int", nullable: false),
                     IdPaciente = table.Column<int>(type: "int", nullable: false)
                 },
@@ -76,8 +78,8 @@ namespace CitasMedico.Migrations
                 {
                     table.PrimaryKey("PK_Cita", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cita_Diagnostico_Id",
-                        column: x => x.Id,
+                        name: "FK_Cita_Diagnostico_IdDiagnostico",
+                        column: x => x.IdDiagnostico,
                         principalTable: "Diagnostico",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -118,6 +120,12 @@ namespace CitasMedico.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cita_IdDiagnostico",
+                table: "Cita",
+                column: "IdDiagnostico",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cita_IdMedico",

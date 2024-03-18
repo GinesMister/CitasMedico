@@ -5,7 +5,7 @@ namespace CitasMedico.Interfaces
 {
     public interface IUnitOfWork
     {
-        GenericRepository<Cita> Citas { get; }
+        CitaRepository<Cita> Citas { get; }
         GenericRepository<Diagnostico> Diagnosticos { get; }
         MedicoRepository<Medico> Medicos { get; }
         PacienteRepository<Paciente> Pacientes { get; }

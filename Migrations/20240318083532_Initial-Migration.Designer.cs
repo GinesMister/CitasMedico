@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CitasMedico.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240315083119_Initial-Migration")]
+    [Migration("20240318083532_Initial-Migration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -31,8 +31,13 @@ namespace CitasMedico.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+
                     b.Property<DateTime>("FechaHora")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdDiagnostico")
+                        .HasColumnType("int");
 
                     b.Property<int>("IdMedico")
                         .HasColumnType("int");
@@ -45,6 +50,9 @@ namespace CitasMedico.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdDiagnostico")
+                        .IsUnique();
 
                     b.HasIndex("IdMedico");
 
@@ -171,7 +179,7 @@ namespace CitasMedico.Migrations
                 {
                     b.HasOne("CitasMedico.Models.Diagnostico", "Diagnostico")
                         .WithOne("Cita")
-                        .HasForeignKey("CitasMedico.Models.Cita", "Id")
+                        .HasForeignKey("CitasMedico.Models.Cita", "IdDiagnostico")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -29,10 +29,10 @@ namespace CitasMedico.Data
                 .WithMany(m => m.Citas)
                 .HasForeignKey(c => c.IdPaciente);
 
-            modelBuilder.Entity<Diagnostico>()
-                .HasOne(mp => mp.Cita)
-                .WithOne(dp => dp.Diagnostico)
-                .HasForeignKey<Cita>(dp => dp.Id);
+            modelBuilder.Entity<Cita>()
+                .HasOne(c => c.Diagnostico)
+                .WithOne(d => d.Cita)
+                .HasForeignKey<Cita>("IdDiagnostico");
         }
     }
 }

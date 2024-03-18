@@ -13,6 +13,7 @@ namespace CitasMedico.Models
         public DateTime FechaHora { get; set; }
         public string MotivoCita { get; set; }
 
+        public int IdDiagnostico { get; set; }
         public Diagnostico Diagnostico { get; set; }
 
         public int IdMedico { get; set; }
