@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CitasMedico.DTOs;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CitasMedico.Models
@@ -12,5 +13,11 @@ namespace CitasMedico.Models
         public string Enfermedad { get; set; }
 
         public virtual Cita Cita { get; set; }
+
+        public void Update(DiagnosticoDTO diagnostico)
+        {
+            ValoracionEspecialista = diagnostico.ValoracionEspecialista;
+            Enfermedad = diagnostico.Enfermedad;
+        }
     }
 }

@@ -62,6 +62,7 @@ namespace CitasMedico.Services
             try
             {
                 var result = _mapper.Map<CitaDTO>(_unitOfWork.Citas.Delete(_unitOfWork.Citas.GetById(id)));
+                _unitOfWork.Diagnosticos.Delete(_unitOfWork.Diagnosticos.GetById((int) result.Diagnostico.Id));
                 _unitOfWork.SaveChanges();
                 return result;
             }
@@ -80,11 +81,18 @@ namespace CitasMedico.Services
             Cita? Cita = _unitOfWork.Citas.GetById(id);
             if (cita == null)
                 throw new ServiceException(ErrorType.NotFound, "No hay una cita con ese ID");
+            Cita.Update(cita);
 
-            Cita.Update(_mapper, cita);
+            // Update de Diagnostico
+            if (Cita.Diagnostico.Id != cita.Diagnostico.Id)
+                throw new ServiceException(ErrorType.BadRequest, "No se ha proporcionado el ID del diagnóstico correctamente");
+            Diagnostico Diagnostico = _unitOfWork.Diagnosticos.GetById((int) cita.Diagnostico.Id);
+            Diagnostico.Update(cita.Diagnostico);
+
             try
             {
                 _unitOfWork.Citas.Update(Cita);
+                _unitOfWork.Diagnosticos.Update(Diagnostico);
                 _unitOfWork.SaveChanges();
                 return _mapper.Map<CitaDTO>(cita);
             }

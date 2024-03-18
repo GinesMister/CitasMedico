@@ -21,11 +21,10 @@ namespace CitasMedico.Models
         public Medico Medico { get; set; }
         public Paciente Paciente { get; set; }
 
-        public void Update(IMapper _mapper, CitaDTO cita)
+        public void Update(CitaDTO cita)
         {
             FechaHora = cita.FechaHora;
             MotivoCita = cita.MotivoCita;
-            Diagnostico = _mapper.Map<Diagnostico>(cita.Diagnostico);
             IdMedico = cita.IdMedico;
             IdPaciente = cita.IdPaciente;
         }
