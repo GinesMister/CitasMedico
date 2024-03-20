@@ -5,7 +5,7 @@ using CitasMedico.Exceptions;
 
 namespace CitasMedico.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("citasmedicos/[controller]")]
     [ApiController]
     public class CitaController : Controller
     {
