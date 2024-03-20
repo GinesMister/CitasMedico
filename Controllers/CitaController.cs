@@ -28,6 +28,7 @@ namespace CitasMedico.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(CitaDTO))]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public IActionResult GetCitaById(int id)
         {
             try
@@ -37,8 +38,9 @@ namespace CitasMedico.Controllers
             }
             catch (ServiceException ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 if (ex.Error == ErrorType.NotFound)
-                    return NotFound(ex.Message);
+                    return NotFound(ModelState);
             }
             return BadRequest();
         }
@@ -60,14 +62,15 @@ namespace CitasMedico.Controllers
             }
             catch (ServiceException ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 switch (ex.Error)
                 {
                     case ErrorType.NotFound:
-                        return NotFound(ex.Message);
+                        return NotFound(ModelState);
                     case ErrorType.BadRequest:
-                        return BadRequest(ex.Message);
+                        return BadRequest(ModelState);
                     default:
-                        return BadRequest(ex.Message);
+                        return BadRequest(ModelState);
                 }
             }
         }
@@ -88,7 +91,8 @@ namespace CitasMedico.Controllers
             }
             catch (ServiceException ex)
             {
-                return BadRequest(ex.Message);
+                ModelState.AddModelError("", ex.Message);
+                return BadRequest(ModelState);
             }
         }
 
@@ -106,12 +110,13 @@ namespace CitasMedico.Controllers
             }
             catch (ServiceException ex)
             {
+                ModelState.AddModelError("", ex.Message);
                 switch(ex.Error)
-                { 
+                {
                     case ErrorType.NotFound: 
-                        return NotFound(ex.Message);
+                        return NotFound(ModelState);
                     default:
-                        return BadRequest(ex.Message);
+                        return BadRequest(ModelState);
                 }
             }
         }
